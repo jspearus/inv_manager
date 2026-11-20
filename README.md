@@ -30,13 +30,24 @@ Set `DJANGO_ALLOWED_HOSTS` to include that address, then start the development s
 
 ```bash
 export DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.xx
-python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+python3 manage.py migrate
+python3 manage.py runserver 0.0.0.0:8000
 ```
 
 Replace `192.168.1.30` with the computer's current LAN address. From another device on the same network, open `http://192.168.1.30:8000/`. If the address changes, update the allowlist and URL. Your firewall must also allow inbound connections on port 8000.
 
 This development server and API have no authentication: anyone who can reach them on the network can view, add, change, or delete inventory. Use only on a trusted private network; do not port-forward it or expose it to the internet.
+
+## HTTPS reverse proxy deployment
+
+When serving the app at `https://inv.jspearlab.com` through a reverse proxy, Django trusts that HTTPS origin for CSRF checks by default. Set `DJANGO_ALLOWED_HOSTS` to include `inv.jspearlab.com` as well, and restart the Django process after updating its configuration:
+
+```bash
+export DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,inv.jspearlab.com
+export DJANGO_CSRF_TRUSTED_ORIGINS=https://inv.jspearlab.com
+```
+
+`DJANGO_CSRF_TRUSTED_ORIGINS` accepts a comma-separated list of full origins, including the scheme (for example, `https://example.com`). Do not use a wildcard or add origins you do not control. Configure the reverse proxy to forward requests only from trusted sources.
 
 ## REST API
 
