@@ -29,7 +29,7 @@ ip -4 -o addr show scope global
 Set `DJANGO_ALLOWED_HOSTS` to include that address, then start the development server so it listens for connections from other devices:
 
 ```bash
-export DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.30
+export DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,192.168.1.xx
 python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
 ```
