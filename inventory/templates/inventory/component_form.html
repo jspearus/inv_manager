@@ -1,0 +1,29 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}{{ page_title }} · Hardware Store{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <p class="eyebrow">INVENTORY</p>
+    <h1>{{ page_title }}</h1>
+    <p class="subheading">Enter the component type and its value separately. You can update these details anytime.</p>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<p class="help-text">{{ field.help_text }}</p>{% endif %}
+          {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
+      {% endif %}
+      <div class="form-actions">
+        <button class="button" type="submit">Save component</button>
+        <a class="cancel-link" href="{% url 'inventory:component_list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

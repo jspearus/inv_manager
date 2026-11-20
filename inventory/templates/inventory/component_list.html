@@ -1,0 +1,67 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Inventory · Hardware Store{% endblock %}
+
+{% block content %}
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">YOUR WORKBENCH</p>
+      <h1>Component inventory</h1>
+      <p class="subheading">Keep track of what you have and where it lives.</p>
+    </div>
+    <a class="button" href="{% url 'inventory:component_create' %}">+ Add component</a>
+  </div>
+
+  <form class="search-form" method="get" role="search">
+    <label class="sr-only" for="component-search">Search components</label>
+    <input
+      id="component-search"
+      type="search"
+      name="q"
+      value="{{ query }}"
+      placeholder="Search name, value, description, or location"
+    >
+    <button class="button" type="submit">Search</button>
+    {% if query %}<a class="cancel-link" href="{% url 'inventory:component_list' %}">Clear</a>{% endif %}
+  </form>
+
+  <section class="inventory-card" aria-label="Component inventory">
+    {% if components %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Value</th><th>Description</th><th>Quantity</th><th>Location</th><th><span class="sr-only">Actions</span></th></tr>
+          </thead>
+          <tbody>
+            {% for component in components %}
+              <tr>
+                <td class="component-name">{{ component.name }}</td>
+                <td>{% if component.value %}{{ component.value }}{% else %}<span class="muted">Not set</span>{% endif %}</td>
+                <td>{% if component.description %}{{ component.description|truncatewords:12 }}{% else %}<span class="muted">Not set</span>{% endif %}</td>
+                <td><span class="quantity">{{ component.quantity }}</span></td>
+                <td>{% if component.location %}{{ component.location }}{% else %}<span class="muted">Not set</span>{% endif %}</td>
+                <td class="actions">
+                  <a href="{% url 'inventory:component_update' component.pk %}">Edit</a>
+                  <a class="delete-link" href="{% url 'inventory:component_delete' component.pk %}">Delete</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">⌁</div>
+        {% if query %}
+          <h2>No components found</h2>
+          <p>Try a different name, value, description, or location.</p>
+        {% else %}
+          <h2>Your inventory is empty</h2>
+          <p>Add your first component to start organizing your parts.</p>
+          <a class="button" href="{% url 'inventory:component_create' %}">Add your first component</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+  <p class="api-note">Building an integration? Browse the <a href="{% url 'component-list' %}">components API</a>.</p>
+{% endblock %}

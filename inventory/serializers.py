@@ -1,0 +1,19 @@
+from rest_framework import serializers
+
+from .models import Component
+
+
+class ComponentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = (
+            "id",
+            "name",
+            "value",
+            "description",
+            "quantity",
+            "location",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "created_at", "updated_at")

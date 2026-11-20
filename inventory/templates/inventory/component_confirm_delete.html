@@ -1,0 +1,18 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}Delete component · Hardware Store{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <p class="eyebrow">INVENTORY</p>
+    <h1>Delete component?</h1>
+    <p class="subheading">This will permanently remove <strong>{{ component.name }}</strong> from your inventory.</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-actions">
+        <button class="button button-danger" type="submit">Delete component</button>
+        <a class="cancel-link" href="{% url 'inventory:component_list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
